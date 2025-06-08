@@ -4,55 +4,52 @@ import { nanoid } from 'nanoid';
 
 const Create = (props) => {
 
-    const todos=props.todos;
-    const settodos=props.settodos;
+  const todos = props.todos;
+  const settodos = props.settodos;
 
-       const [title, settitle] = useState("");
-       const [discription, setdiscription] = useState("")
-     
-    const submitHandler = (e)=>{
+  const [title, settitle] = useState("");
+
+  const submitHandler = (e) => {
     e.preventDefault();
 
-    const newTodo ={
-      id:nanoid(),
+    const newTodo = {
+      id: nanoid(),
       title,
-      discription,
-      isCompleted:false,
+      isCompleted: false,
     }
     // const copytodos = [...todos];
     // copytodos.push(newTodo);
     // settodos(copytodos);   // is same as the below line
 
-     settodos([...todos , newTodo])
+    settodos([...todos, newTodo])
 
-     //empty the title inputs
-     settitle("");
-     setdiscription("")
+    //empty the title inputs
+    settitle("");
 
   }
 
 
   return (
-    <div>
-       <h1>Create Tasks</h1>
-      <form onSubmit={submitHandler}>
+    < div className=' rounded p-10 w-[50%] mx-auto  text-white'>
+      <h1 className='text-4xl font-thin'>Set <span className='text-red-300 '>Remainders</span> For <br />Task</h1>
+      <form
+        className=' flex  justify-start flex-col p-5 mt-10 '
+        onSubmit={submitHandler}>
         <input
-        onChange={(e)=>{
-          settitle(e.target.value)}}
+          className='border-b w-full p-2 rounded outline-0'
+          onChange={(e) => {
+            settitle(e.target.value)
+          }}
           value={title}
-         type="text"
+          type="text"
           placeholder='Title' />
         <br /> <br />
-         <input
-        onChange={(e)=>{
-          setdiscription(e.target.value)}}
-          value={discription}
-         type="text"
-          placeholder='discription' />
-           <br /> <br />
-        <button>Create Todo</button>
+
+        <button
+          className='border p-2 rounded'
+        >Create Task</button>
       </form>
-    </div>
+    </ div>
   )
 }
 
