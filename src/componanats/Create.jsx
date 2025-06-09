@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+// import React, { useState } from 'react'
+import { useForm } from "react-hook-form"
 import { nanoid } from 'nanoid';
+import { toast } from "react-toastify";
 
 
 const Create = (props) => {
@@ -7,44 +9,45 @@ const Create = (props) => {
   const todos = props.todos;
   const settodos = props.settodos;
 
-  const [title, settitle] = useState("");
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  }=useForm();
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const submitHandler = (data) => {
+   data.isCompleted = false;
+   data.id=nanoid();
+ 
+   const copytodos=[...todos];
+   copytodos.push(data);
+   settodos(copytodos);
+    
+   toast.success("Task Added Successfully")
 
-    const newTodo = {
-      id: nanoid(),
-      title,
-      isCompleted: false,
-    }
-    // const copytodos = [...todos];
-    // copytodos.push(newTodo);
-    // settodos(copytodos);   // is same as the below line
+   reset();
 
-    settodos([...todos, newTodo])
-
-    //empty the title inputs
-    settitle("");
 
   }
 
+  //  console.log(errors);
 
   return (
     < div className=' rounded p-10 w-[50%] mx-auto  text-white'>
       <h1 className='text-4xl font-thin'>Set <span className='text-red-300 '>Remainders</span> For <br />Task</h1>
       <form
         className=' flex  justify-start flex-col p-5 mt-10 '
-        onSubmit={submitHandler}>
+        onSubmit={handleSubmit(submitHandler)}>
         <input
+          {...register("title" ,{required:"Title cannot Be Empty"})}
           className='border-b w-full p-2 rounded outline-0'
-          onChange={(e) => {
-            settitle(e.target.value)
-          }}
-          value={title}
           type="text"
           placeholder='Title' />
-        <br /> <br />
-
+    
+           <small className=" mt-2 text-red-400">{errors?.title?.message}</small>
+        <br />
+        <br />
         <button
           className='border p-2 rounded'
         >Create Task</button>
